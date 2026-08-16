@@ -19,18 +19,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
     )
     Optional<User> findUserByPhoneNumber(@Param("phone_number") String phoneNumber);
 
-    @Query(value = "SELECT id, full_name, email_address, phone_number, username, password " +
-            "FROM users WHERE email_address = :email_address",
-            nativeQuery = true
-    )
-    Optional<User> findUserByEmailAddress(@Param("email_address") String emailAddress);
-
     @Query("""
                 SELECT u
                 FROM User u
                 WHERE u.email = :email
                 AND u.enabled = true
             """)
-    Optional<User> findActiveUserByEmail(@Param("email") String email);
+    Optional<User> findActiveUserByEmail(@Param("email_address") String email);
 
 }
