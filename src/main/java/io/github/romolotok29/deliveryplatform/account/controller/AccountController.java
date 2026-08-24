@@ -1,7 +1,9 @@
 package io.github.romolotok29.deliveryplatform.account.controller;
 
-import io.github.romolotok29.deliveryplatform.account.dto.AccountDto;
-import io.github.romolotok29.deliveryplatform.account.service.AccountService;
+import io.github.romolotok29.deliveryplatform.account.UserMapper;
+import io.github.romolotok29.deliveryplatform.account.dto.AccountResponse;
+import io.github.romolotok29.deliveryplatform.account.entity.User;
+import io.github.romolotok29.deliveryplatform.account.service.IAccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,14 +17,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AccountController {
 
-    private final AccountService accountService;
+    private final IAccountService accountService;
+    private final UserMapper userMapper;
 
     @GetMapping("{id}") //@RequestParam only for search, filter & pagination
-    public ResponseEntity<AccountDto> getCurrentAccountDetails(@PathVariable Long id) {
+    public ResponseEntity<AccountResponse> getCurrentAccountDetails(@PathVariable Long id) {
 
-        AccountDto accountResponse = accountService.getCurrentAccountDetails(id);
+        User currentUser = accountService.getCurrentAccountDetails(id);
 
-        return ResponseEntity.status(HttpStatus.OK).body(accountResponse);
+        return ResponseEntity.status(HttpStatus.OK).body(userMapper.toAccountResponse(currentUser));
     }
 
 }
