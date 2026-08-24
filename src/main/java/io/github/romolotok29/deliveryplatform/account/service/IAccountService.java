@@ -1,9 +1,9 @@
 package io.github.romolotok29.deliveryplatform.account.service;
 
-import io.github.romolotok29.deliveryplatform.account.dto.AccountDto;
+import io.github.romolotok29.deliveryplatform.account.entity.User;
 
 public interface IAccountService {
 
-    AccountDto getCurrentAccountDetails(Long userId);
+    User getCurrentAccountDetails(Long userId);
 
 }

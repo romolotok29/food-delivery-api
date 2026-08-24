@@ -6,4 +6,4 @@ import tools.jackson.databind.annotation.JsonNaming;
 
 //@JsonRootName("account")
 @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
-public record AccountDto(String fullName, String phoneNumber, String emailAddress) {}
+public record AccountResponse(String fullName, String phoneNumber, String emailAddress) {}
