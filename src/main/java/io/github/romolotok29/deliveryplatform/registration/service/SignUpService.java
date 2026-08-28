@@ -1,6 +1,7 @@
 package io.github.romolotok29.deliveryplatform.registration.service;
 
 import io.github.romolotok29.deliveryplatform.account.UserMapper;
+import io.github.romolotok29.deliveryplatform.account.entity.Role;
 import io.github.romolotok29.deliveryplatform.account.entity.User;
 import io.github.romolotok29.deliveryplatform.account.repository.UserRepository;
 import io.github.romolotok29.deliveryplatform.exceptions.UserAlreadyExistsException;
@@ -42,6 +43,7 @@ public class SignUpService implements ISignUpService {
 
     private User createNewUser(SignUpRequest request) {
         User user = userMapper.toEntity(request);
+        user.setRole(Role.USER);
         encodePassword(user);
         return user;
     }

@@ -32,8 +32,13 @@ public class User {
     @Column(name = "phone_number", nullable = false, unique = true)
     private String phoneNumber;
 
-    @Column(name = "is_enabled")
-    private boolean isEnabled;
+    @Column(name = "role", nullable = false)
+//    @ElementCollection(targetClass = Role.class)
+    @Enumerated(EnumType.STRING)
+    private Role role = Role.USER;
+
+//    @Column(name = "is_enabled")
+//    private boolean isEnabled;
 
     @Column(name = "created_at", updatable = false)
     @CreationTimestamp
