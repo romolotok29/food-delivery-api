@@ -35,10 +35,10 @@ public class User {
     @Column(name = "role", nullable = false)
 //    @ElementCollection(targetClass = Role.class)
     @Enumerated(EnumType.STRING)
-    private Role role = Role.USER;
+    private Role role;
 
-//    @Column(name = "is_enabled")
-//    private boolean isEnabled;
+    @Column(name = "is_email_verified")
+    private boolean isEmailVerified = false;
 
     @Column(name = "created_at", updatable = false)
     @CreationTimestamp

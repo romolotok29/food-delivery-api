@@ -1,4 +1,4 @@
-package io.github.romolotok29.deliveryplatform.exceptions;
+package io.github.romolotok29.deliveryplatform.exceptions.authentication;
 
 public class InvalidCredentialsException extends RuntimeException {
 
