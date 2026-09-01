@@ -1,6 +1,6 @@
 package io.github.romolotok29.deliveryplatform.authentication.service;
 
-import io.github.romolotok29.deliveryplatform.exceptions.InvalidCredentialsException;
+import io.github.romolotok29.deliveryplatform.exceptions.authentication.InvalidCredentialsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

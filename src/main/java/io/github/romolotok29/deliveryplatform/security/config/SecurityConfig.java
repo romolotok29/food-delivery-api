@@ -41,7 +41,7 @@ public class SecurityConfig {
                         .accessDeniedHandler(new HttpStatusAccessDeniedHandler(HttpStatus.FORBIDDEN))
                 )
                 .logout(logout -> logout
-                        .logoutUrl("/api/v1/sign-out")
+                        .logoutUrl("/api/v1/auth/sign-out")
                         .invalidateHttpSession(true)
                         .clearAuthentication(true)
                         .deleteCookies("JSESSIONID")
@@ -62,9 +62,11 @@ public class SecurityConfig {
                 )
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/api/v1/sign-up").permitAll()
-                        .requestMatchers("/api/v1/sign-in").permitAll()
-                        .requestMatchers("/api/v1/sign-in2").permitAll()
+                        .requestMatchers("/api/v1/auth/sign-up").permitAll()
+                        .requestMatchers("/api/v1/auth/confirm-email").permitAll()
+                        .requestMatchers("/api/v1/auth/resend-confirmation").permitAll()
+//                        .requestMatchers("/api/v1/auth/reset-password").permitAll()
+                        .requestMatchers("/api/v1/auth/sign-in").permitAll()
                         .anyRequest().authenticated()
                 )
 //                .anonymous()

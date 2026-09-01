@@ -10,13 +10,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/sign-up")
+@RequestMapping("/api/v1/auth/sign-up")
 @RequiredArgsConstructor
 public class SignUpController {
 
     private final ISignUpService signUpService;
 
-    @PostMapping//Вернуть SignUpResponse
+    @PostMapping
     public ResponseEntity<SignUpResponse> signUp(@Valid @RequestBody SignUpRequest request) {
 
         signUpService.signUp(request);
@@ -24,8 +24,9 @@ public class SignUpController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(new SignUpResponse(
-                        "Please check your email and click the confirmation link to complete your registration."
-                ));
+                                "Please check your email and click the confirmation link to complete your registration."
+                        )
+                );
     }
 
 }

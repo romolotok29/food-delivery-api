@@ -18,7 +18,7 @@ public class SecurityUser implements UserDetails {
     private final String fullName;
     private final String emailAddress;
     private final String password;
-//    private final boolean isEnabled;
+    private final boolean isEmailVerified;
     private final Collection<? extends GrantedAuthority> authorities;
 
     public SecurityUser(User user) {
@@ -26,7 +26,7 @@ public class SecurityUser implements UserDetails {
         this.fullName = user.getFullName();
         this.emailAddress = user.getEmailAddress();
         this.password = user.getPassword();
-//        this.isEnabled = user.isEnabled();
+        this.isEmailVerified = user.isEmailVerified();
         this.authorities = List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
     }
 
@@ -43,6 +43,11 @@ public class SecurityUser implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return isEmailVerified;
     }
 
 }
