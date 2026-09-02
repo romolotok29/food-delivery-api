@@ -48,4 +48,10 @@ public class User {
     @Column(name = "updated_at")
     private Instant updatedAt;
 
+    @Column(name = "failed_login_attempts")
+    private int failedLoginAttempts;
+
+    @Column(name = "account_locked_until")
+    private Instant accountLockedUntil;
+
 }

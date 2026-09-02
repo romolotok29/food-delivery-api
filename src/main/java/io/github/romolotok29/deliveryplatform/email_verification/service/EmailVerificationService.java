@@ -6,7 +6,7 @@ import io.github.romolotok29.deliveryplatform.email_verification.dto.ResendConfi
 import io.github.romolotok29.deliveryplatform.email_verification.entity.EmailVerificationToken;
 import io.github.romolotok29.deliveryplatform.email_verification.event.VerificationEmailResentEvent;
 import io.github.romolotok29.deliveryplatform.email_verification.repository.EmailVerificationTokenRepository;
-import io.github.romolotok29.deliveryplatform.exceptions.registration.UserNotFoundException;
+import io.github.romolotok29.deliveryplatform.exceptions.authentication.UserNotFoundException;
 import io.github.romolotok29.deliveryplatform.exceptions.verification.EmailAddressAlreadyVerifiedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;

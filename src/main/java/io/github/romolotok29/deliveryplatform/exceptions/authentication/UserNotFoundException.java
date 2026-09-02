@@ -1,4 +1,4 @@
-package io.github.romolotok29.deliveryplatform.exceptions.registration;
+package io.github.romolotok29.deliveryplatform.exceptions.authentication;
 
 public class UserNotFoundException extends RuntimeException {
     public UserNotFoundException() {
