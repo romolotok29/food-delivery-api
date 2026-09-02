@@ -1,8 +1,10 @@
 package io.github.romolotok29.deliveryplatform.authentication.service;
 
+import io.github.romolotok29.deliveryplatform.exceptions.authentication.AccountTemporarilyLockedException;
 import io.github.romolotok29.deliveryplatform.exceptions.authentication.InvalidCredentialsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -21,23 +23,14 @@ public class SignInService implements ISignInService {
 
         try {
             return authenticationManager.authenticate(authenticationToken);
+
+        } catch (LockedException ex) {
+            throw new AccountTemporarilyLockedException();
+
         } catch (AuthenticationException ex) {
+
             throw new InvalidCredentialsException();
         }
     }
-
-//    @Override
-//    public Authentication signIn(String emailAddress, String password) {
-//
-//        try {
-//            UsernamePasswordAuthenticationToken token =
-//                    new UsernamePasswordAuthenticationToken(emailAddress, password);
-//
-//            return authenticationManager.authenticate(token);
-//
-//        } catch (AuthenticationException ex) {
-//            throw new InvalidCredentialsException();
-//        }
-//    }
 
 }

@@ -1,5 +1,6 @@
 package io.github.romolotok29.deliveryplatform.exceptions;
 
+import io.github.romolotok29.deliveryplatform.exceptions.authentication.AccountTemporarilyLockedException;
 import io.github.romolotok29.deliveryplatform.exceptions.authentication.InvalidCredentialsException;
 import io.github.romolotok29.deliveryplatform.exceptions.registration.UserAlreadyExistsException;
 import io.github.romolotok29.deliveryplatform.exceptions.verification.EmailAddressAlreadyVerifiedException;
@@ -88,6 +89,21 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                 new ApiErrorResponse(
                         "VERIFICATION_TOKEN_NOT_FOUND",
+                        ex.getMessage(),
+                        request.getRequestURI(),
+                        LocalDateTime.now()
+                )
+        );
+    }
+
+    @ExceptionHandler(AccountTemporarilyLockedException.class)
+    public ResponseEntity<ApiErrorResponse> handleAccountTemporarilyLockedException(
+            AccountTemporarilyLockedException ex,
+            HttpServletRequest request
+    ) {
+        return ResponseEntity.status(HttpStatus.LOCKED).body(
+                new ApiErrorResponse(
+                        "ACCOUNT_TEMPORARILY_LOCKED",
                         ex.getMessage(),
                         request.getRequestURI(),
                         LocalDateTime.now()

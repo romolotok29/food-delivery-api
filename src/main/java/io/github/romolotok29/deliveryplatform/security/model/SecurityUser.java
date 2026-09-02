@@ -7,6 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
 
@@ -19,6 +20,7 @@ public class SecurityUser implements UserDetails {
     private final String emailAddress;
     private final String password;
     private final boolean isEmailVerified;
+    private final Instant accountLockedUntil;
     private final Collection<? extends GrantedAuthority> authorities;
 
     public SecurityUser(User user) {
@@ -27,6 +29,7 @@ public class SecurityUser implements UserDetails {
         this.emailAddress = user.getEmailAddress();
         this.password = user.getPassword();
         this.isEmailVerified = user.isEmailVerified();
+        this.accountLockedUntil = user.getAccountLockedUntil();
         this.authorities = List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
     }
 
@@ -48,6 +51,11 @@ public class SecurityUser implements UserDetails {
     @Override
     public boolean isEnabled() {
         return isEmailVerified;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return accountLockedUntil == null || !accountLockedUntil.isAfter(Instant.now());
     }
 
 }
