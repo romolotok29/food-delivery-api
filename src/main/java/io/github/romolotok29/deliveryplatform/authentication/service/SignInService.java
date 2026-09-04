@@ -25,6 +25,7 @@ public class SignInService implements ISignInService {
             return authenticationManager.authenticate(authenticationToken);
 
         } catch (LockedException ex) {
+
             throw new AccountTemporarilyLockedException();
 
         } catch (AuthenticationException ex) {
