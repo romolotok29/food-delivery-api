@@ -1,6 +1,6 @@
 package io.github.romolotok29.deliveryplatform.security.config;
 
-import io.github.romolotok29.deliveryplatform.security.provider.AccountLockoutAuthenticationProvider;
+import io.github.romolotok29.deliveryplatform.security.provider.LockoutAuthenticationProvider;
 import io.github.romolotok29.deliveryplatform.security.service.JpaUserDetailsService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
@@ -66,7 +66,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/auth/sign-up").permitAll()
                         .requestMatchers("/api/v1/auth/confirm-email").permitAll()
                         .requestMatchers("/api/v1/auth/resend-confirmation").permitAll()
-//                        .requestMatchers("/api/v1/auth/reset-password").permitAll()
+                        .requestMatchers("/api/v1/auth/forgot-password").permitAll()
+                        .requestMatchers("/api/v1/auth/reset-password").permitAll()
                         .requestMatchers("/api/v1/auth/sign-in").permitAll()
                         .anyRequest().authenticated()
                 )
@@ -120,7 +121,7 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationManager authenticationManager(
-            AccountLockoutAuthenticationProvider authenticationProvider
+            LockoutAuthenticationProvider authenticationProvider
     ) {
         return new ProviderManager(authenticationProvider);
     }

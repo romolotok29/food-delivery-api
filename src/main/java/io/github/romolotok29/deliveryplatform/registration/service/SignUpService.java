@@ -32,8 +32,8 @@ public class SignUpService implements ISignUpService {
 
     private final ApplicationEventPublisher applicationEventPublisher;
 
-    @Transactional
     @Override
+    @Transactional
     public User signUp(SignUpRequest request) {
 
         checkIfUserExists(request.getPhoneNumber(), request.getEmailAddress());

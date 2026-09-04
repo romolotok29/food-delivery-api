@@ -23,7 +23,8 @@ public class SignUpController {
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(new SignUpResponse(
+                .body(
+                        new SignUpResponse(
                                 "Please check your email and click the confirmation link to complete your registration."
                         )
                 );

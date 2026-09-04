@@ -11,11 +11,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AccountLockoutAuthenticationProvider extends DaoAuthenticationProvider {
+public class LockoutAuthenticationProvider extends DaoAuthenticationProvider {
 
     private final IAccountLockoutService accountLockoutService;
 
-    public AccountLockoutAuthenticationProvider(
+    public LockoutAuthenticationProvider(
             UserDetailsService userDetailsService,
             IAccountLockoutService accountLockoutService,
             PasswordEncoder passwordEncoder

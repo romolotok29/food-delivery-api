@@ -17,7 +17,7 @@ public class EmailVerificationController {
 
     @PostMapping("/confirm-email")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void confirmVerificationToken(@RequestBody ConfirmEmailAddressRequest request) {
+    public void confirmVerificationToken(@Valid @RequestBody ConfirmEmailAddressRequest request) {
         emailVerificationService.confirmEmailAddress(request.token());
     }
 

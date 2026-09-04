@@ -35,13 +35,14 @@ public class SignUpRequest {
     @NotBlank(message = "This field can't be blank.")
     @Size(min = 8, max = 20, message = "Password must be 8-18 characters long.")
     @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*+=]).*$",
-            message = "Password must contain at least one digit, one lowercase letter, one uppercase letter and one special character.")
-    @JsonProperty("password")
+            message = """
+                    Password must contain at least one digit,\s
+                    one lowercase letter, one uppercase letter and one special character.""")
     private String password;
 
 
     @NotBlank(message = "This field can't be blank.")
-    @JsonProperty("repeat_password")
+    @JsonProperty("confirm_password")
     private String confirmPassword;
 
 }
