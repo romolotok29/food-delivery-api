@@ -22,6 +22,7 @@ import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.session.*;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.context.SecurityContextRepository;
+import org.springframework.security.web.csrf.*;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 
 import java.util.List;
@@ -33,10 +34,21 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(
             HttpSecurity httpSecurity,
+            CsrfTokenRepository csrfTokenRepository,
             JpaUserDetailsService jpaUserDetailsService
     ) {
 
         return httpSecurity
+                .csrf(csrf -> csrf
+                        .csrfTokenRepository(csrfTokenRepository)
+                        .ignoringRequestMatchers(
+                                "/api/v1/auth/sign-up",
+                                "/api/v1/auth/confirm-email",
+                                "/api/v1/auth/resend-confirmation",
+                                "/api/v1/auth/forgot-password",
+                                "/api/v1/auth/reset-password"
+                        )
+                )
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
                         .accessDeniedHandler(new HttpStatusAccessDeniedHandler(HttpStatus.FORBIDDEN))
@@ -54,21 +66,22 @@ public class SecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .sessionManagement(
                         session -> session
-//                                .sessionAuthenticationStrategy(new ConcurrentSessionControlAuthenticationStrategy())
+//                                .sessionAuthenticationStrategy(new )
                                 .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                                 .sessionFixation().changeSessionId()
                                 .maximumSessions(1)
                                 .maxSessionsPreventsLogin(true)
                                 .sessionRegistry(sessionRegistry())
                 )
-                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
+                        .requestMatchers("/error").permitAll()
                         .requestMatchers("/api/v1/auth/sign-up").permitAll()
                         .requestMatchers("/api/v1/auth/confirm-email").permitAll()
                         .requestMatchers("/api/v1/auth/resend-confirmation").permitAll()
                         .requestMatchers("/api/v1/auth/forgot-password").permitAll()
                         .requestMatchers("/api/v1/auth/reset-password").permitAll()
                         .requestMatchers("/api/v1/auth/sign-in").permitAll()
+                        .requestMatchers("/api/v1/csrf").permitAll()
                         .anyRequest().authenticated()
                 )
 //                .anonymous()
@@ -84,29 +97,36 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SessionRegistry sessionRegistry() {
-        return new SessionRegistryImpl();
+    public CsrfTokenRepository csrfTokenRepository() {
+        return new HttpSessionCsrfTokenRepository();
     }
 
     @Bean
-    public SessionAuthenticationStrategy sessionAuthenticationStrategy(SessionRegistry sessionRegistry) {
+    public SessionAuthenticationStrategy sessionAuthenticationStrategy(
+            CsrfTokenRepository csrfTokenRepository,
+            SessionRegistry sessionRegistry
+
+    ) {
+
         var concurrentSessionControl =
                 new ConcurrentSessionControlAuthenticationStrategy(sessionRegistry);
 
         concurrentSessionControl.setMaximumSessions(1);
         concurrentSessionControl.setExceptionIfMaximumExceeded(true);
 
-        var changeSessionId = new ChangeSessionIdAuthenticationStrategy();
-
-        var registerSession = new RegisterSessionAuthenticationStrategy(sessionRegistry);
-
         return new CompositeSessionAuthenticationStrategy(
                 List.of(
                         concurrentSessionControl,
-                        changeSessionId,
-                        registerSession
+                        new ChangeSessionIdAuthenticationStrategy(),
+                        new CsrfAuthenticationStrategy(csrfTokenRepository),
+                        new RegisterSessionAuthenticationStrategy(sessionRegistry)
                 )
         );
+    }
+
+    @Bean
+    public SessionRegistry sessionRegistry() {
+        return new SessionRegistryImpl();
     }
 
     @Bean
@@ -123,6 +143,7 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(
             LockoutAuthenticationProvider authenticationProvider
     ) {
+
         return new ProviderManager(authenticationProvider);
     }
 

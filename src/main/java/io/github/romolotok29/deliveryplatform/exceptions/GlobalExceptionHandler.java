@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,7 +31,7 @@ public class GlobalExceptionHandler {
                         "USER_ALREADY_EXISTS",
                         ex.getMessage(),
                         request.getRequestURI(),
-                        LocalDateTime.now()
+                        Instant.now()
                 )
         );
     }
@@ -46,7 +46,7 @@ public class GlobalExceptionHandler {
                         "UNVERIFIED_EMAIL_ADDRESS",
                         ex.getMessage(),
                         request.getRequestURI(),
-                        LocalDateTime.now()
+                        Instant.now()
                 )
         );
     }
@@ -61,7 +61,7 @@ public class GlobalExceptionHandler {
                         "EMAIL_ALREADY_VERIFIED",
                         ex.getMessage(),
                         request.getRequestURI(),
-                        LocalDateTime.now()
+                        Instant.now()
                 )
         );
     }
@@ -76,7 +76,7 @@ public class GlobalExceptionHandler {
                         "VERIFICATION_TOKEN_EXPIRED",
                         ex.getMessage(),
                         request.getRequestURI(),
-                        LocalDateTime.now()
+                        Instant.now()
                 )
         );
     }
@@ -91,7 +91,7 @@ public class GlobalExceptionHandler {
                         "VERIFICATION_TOKEN_NOT_FOUND",
                         ex.getMessage(),
                         request.getRequestURI(),
-                        LocalDateTime.now()
+                        Instant.now()
                 )
         );
     }
@@ -106,7 +106,7 @@ public class GlobalExceptionHandler {
                         "ACCOUNT_TEMPORARILY_LOCKED",
                         ex.getMessage(),
                         request.getRequestURI(),
-                        LocalDateTime.now()
+                        Instant.now()
                 )
         );
     }
@@ -137,7 +137,7 @@ public class GlobalExceptionHandler {
                         "UNAUTHORIZED",
                         ex.getMessage(),
                         request.getRequestURI(),
-                        LocalDateTime.now()
+                        Instant.now()
                 )
         );
     }
@@ -150,7 +150,7 @@ public class GlobalExceptionHandler {
                         "INTERNAL_SERVER_ERROR",
                         "Unexpected internal error.",
                         request.getRequestURI(),
-                        LocalDateTime.now()
+                        Instant.now()
                 )
         );
     }
