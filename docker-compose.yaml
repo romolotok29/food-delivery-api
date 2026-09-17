@@ -1,0 +1,22 @@
+services:
+  redis:
+    image: redis:7.4-alpine
+    container_name: redis
+    restart: always
+#    depends_on:
+#      - postgres
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+#    environment:
+#      - REDIS_ARGS=--requirepass your_password_here --appendonly yes
+    healthcheck:
+      test: redis-cli ping
+      interval: 10s
+      timeout: 5s
+      start_period: 10s
+      retries: 5
+volumes:
+  redis-data:
+    driver: local

@@ -1,6 +1,6 @@
 package io.github.romolotok29.deliveryplatform.registration.service;
 
-import io.github.romolotok29.deliveryplatform.account.UserMapper;
+import io.github.romolotok29.deliveryplatform.account.mapper.UserMapper;
 import io.github.romolotok29.deliveryplatform.account.entity.Role;
 import io.github.romolotok29.deliveryplatform.account.entity.User;
 import io.github.romolotok29.deliveryplatform.account.repository.UserRepository;
