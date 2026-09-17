@@ -17,7 +17,7 @@ public class EmailNotificationService {
     private static final String EMAIL_FROM = "roland.from.laptop@gmail.com";
 
     @Async
-    public void sendVerificationEmail(String to, String token) {
+    public void sendRegistrationVerificationEmail(String to, String token) {
         send(
                 to,
                 "Confirm your email address",
@@ -40,7 +40,7 @@ public class EmailNotificationService {
     }
 
     @Async
-    public void sendPasswordResetEmail(String to, String token) {
+    public void sendPasswordResetVerificationEmail(String to, String token) {
         send(
                 to,
                 "Reset your password",
@@ -54,6 +54,29 @@ public class EmailNotificationService {
                 This token will expire in 15 minutes.
     
                 If you did not request a password reset, you can safely ignore this email.
+                
+                Best regards,
+                
+                The Food Delivery Team
+                """.formatted(token)
+        );
+    }
+
+    @Async
+    public void sendEmailAddressResetVerificationEmail(String to, String token) {
+        send(
+                to,
+                "Confirm your new email address",
+                """
+                We've received a request of changing an email address.
+    
+                If you did not request email reset, you can safely ignore this message.
+                
+                Your verification token:
+    
+                %s
+                
+                This token will expire in 15 minutes.
                 
                 Best regards,
                 

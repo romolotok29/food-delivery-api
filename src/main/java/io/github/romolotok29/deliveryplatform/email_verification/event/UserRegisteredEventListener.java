@@ -16,7 +16,7 @@ public class UserRegisteredEventListener {
     @TransactionalEventListener
     public void handleUserRegisteredEvent(UserRegisteredEvent event) {
 
-        emailNotificationService.sendVerificationEmail(event.emailAddress(), event.verificationToken());
+        emailNotificationService.sendRegistrationVerificationEmail(event.emailAddress(), event.verificationToken());
     }
 
 }

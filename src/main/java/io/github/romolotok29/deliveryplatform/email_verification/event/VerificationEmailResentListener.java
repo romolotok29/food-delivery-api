@@ -16,7 +16,7 @@ public class VerificationEmailResentListener {
     @TransactionalEventListener
     public void handleVerificationEmailResentEvent(VerificationEmailResentEvent event) {
 
-        emailNotificationService.sendVerificationEmail(event.emailAddress(), event.token());
+        emailNotificationService.sendRegistrationVerificationEmail(event.emailAddress(), event.token());
     }
 
 }

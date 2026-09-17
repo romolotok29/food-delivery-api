@@ -16,7 +16,7 @@ public class ForgotPasswordEventListener {
     @TransactionalEventListener
     public void handleUserRegisteredEvent(ForgotPasswordEvent event) {
 
-        emailNotificationService.sendPasswordResetEmail(event.emailAddress(), event.verificationToken());
+        emailNotificationService.sendPasswordResetVerificationEmail(event.emailAddress(), event.verificationToken());
     }
 
 }

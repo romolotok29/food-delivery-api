@@ -1,6 +1,7 @@
-package io.github.romolotok29.deliveryplatform.account;
+package io.github.romolotok29.deliveryplatform.account.mapper;
 
-import io.github.romolotok29.deliveryplatform.account.dto.AccountResponse;
+import io.github.romolotok29.deliveryplatform.account.dto.AccountDetailsResponse;
+import io.github.romolotok29.deliveryplatform.cache.AccountDetailsCache;
 import io.github.romolotok29.deliveryplatform.account.entity.User;
 import io.github.romolotok29.deliveryplatform.registration.dto.SignUpRequest;
 import org.mapstruct.Mapper;
@@ -8,7 +9,7 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 
-    AccountResponse toAccountResponse(User user);
+    AccountDetailsResponse toAccountResponse(AccountDetailsCache user);
 
     User toEntity(SignUpRequest signUpRequestDto);
 
