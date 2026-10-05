@@ -4,7 +4,7 @@ import io.github.romolotok29.deliveryplatform.account.entity.User;
 import io.github.romolotok29.deliveryplatform.account.repository.UserRepository;
 import io.github.romolotok29.deliveryplatform.email_verification.entity.EmailVerificationToken;
 import io.github.romolotok29.deliveryplatform.email_verification.repository.EmailVerificationTokenRepository;
-import io.github.romolotok29.deliveryplatform.email_verification.service.EmailVerificationTokenService;
+import io.github.romolotok29.deliveryplatform.email_verification.service.verification.EmailVerificationTokenService;
 import io.github.romolotok29.deliveryplatform.exceptions.authentication.UserNotFoundException;
 import io.github.romolotok29.deliveryplatform.reset_password.dto.ForgotPasswordRequest;
 import io.github.romolotok29.deliveryplatform.reset_password.event.ForgotPasswordEvent;

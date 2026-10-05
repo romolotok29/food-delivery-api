@@ -2,11 +2,9 @@ package io.github.romolotok29.deliveryplatform.exceptions;
 
 import io.github.romolotok29.deliveryplatform.exceptions.authentication.AccountTemporarilyLockedException;
 import io.github.romolotok29.deliveryplatform.exceptions.authentication.InvalidCredentialsException;
+import io.github.romolotok29.deliveryplatform.exceptions.authentication.UserNotFoundException;
 import io.github.romolotok29.deliveryplatform.exceptions.registration.UserAlreadyExistsException;
-import io.github.romolotok29.deliveryplatform.exceptions.verification.EmailAddressAlreadyVerifiedException;
-import io.github.romolotok29.deliveryplatform.exceptions.verification.UnverifiedEmailAddressException;
-import io.github.romolotok29.deliveryplatform.exceptions.verification.VerificationTokenExpiredException;
-import io.github.romolotok29.deliveryplatform.exceptions.verification.VerificationTokenNotFoundException;
+import io.github.romolotok29.deliveryplatform.exceptions.verification.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,12 +20,28 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> handleUserNotFoundException(
+            UserNotFoundException ex,
+            HttpServletRequest request
+    ) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                new ApiErrorResponse(
+                        "USER_NOT_FOUND",
+                        ex.getMessage(),
+                        request.getRequestURI(),
+                        Instant.now()
+                )
+        );
+    }
+
     @ExceptionHandler(UserAlreadyExistsException.class)
     public ResponseEntity<ApiErrorResponse> handleUserAlreadyExistsException(
             UserAlreadyExistsException ex,
             HttpServletRequest request
     ) {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiErrorResponse(
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(
+                new ApiErrorResponse(
                         "USER_ALREADY_EXISTS",
                         ex.getMessage(),
                         request.getRequestURI(),
@@ -96,6 +110,36 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(VerificationTokenAlreadyUsedException.class)
+    public ResponseEntity<ApiErrorResponse> handleVerificationTokenAlreadyUsedException(
+            VerificationTokenAlreadyUsedException ex,
+            HttpServletRequest request
+    ) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(
+                new ApiErrorResponse(
+                        "VERIFICATION_TOKEN_ALREADY_USED",
+                        ex.getMessage(),
+                        request.getRequestURI(),
+                        Instant.now()
+                )
+        );
+    }
+
+    @ExceptionHandler(InvalidVerificationTokenException.class)
+    public ResponseEntity<ApiErrorResponse> handleInvalidVerificationTokenException(
+            InvalidVerificationTokenException ex,
+            HttpServletRequest request
+    ) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(
+                new ApiErrorResponse(
+                        "INVALID_VERIFICATION_TOKEN",
+                        ex.getMessage(),
+                        request.getRequestURI(),
+                        Instant.now()
+                )
+        );
+    }
+
     @ExceptionHandler(AccountTemporarilyLockedException.class)
     public ResponseEntity<ApiErrorResponse> handleAccountTemporarilyLockedException(
             AccountTemporarilyLockedException ex,
@@ -117,13 +161,14 @@ public class GlobalExceptionHandler {
 
         Map<String, String> errors = new HashMap<>();
 
-        ex.getBindingResult().getFieldErrors().forEach(fieldError -> {
+        ex.getBindingResult()
+                .getFieldErrors()
+                .forEach(errorField -> errors.put(
+                                errorField.getField(),
+                                errorField.getDefaultMessage()
+                        )
+                );
 
-                    String fieldName = fieldError.getField();
-                    String message = fieldError.getDefaultMessage();
-                    errors.put(fieldName, message);
-                }
-        );
         return errors;
     }
 

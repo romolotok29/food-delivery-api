@@ -43,8 +43,8 @@ public class SecurityConfig {
                         .csrfTokenRepository(csrfTokenRepository)
                         .ignoringRequestMatchers(
                                 "/api/v1/auth/sign-up",
-                                "/api/v1/auth/confirm-email",
-                                "/api/v1/auth/resend-confirmation",
+                                "/api/v1/email/verify",
+                                "/api/v1/email/verification/resend",
                                 "/api/v1/auth/forgot-password",
                                 "/api/v1/auth/reset-password"
                         )
@@ -76,8 +76,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/error").permitAll()
                         .requestMatchers("/api/v1/auth/sign-up").permitAll()
-                        .requestMatchers("/api/v1/auth/confirm-email").permitAll()
-                        .requestMatchers("/api/v1/auth/resend-confirmation").permitAll()
+                        .requestMatchers("/api/v1/email/verify").permitAll()
+                        .requestMatchers("/api/v1/email/change/verify").permitAll()
+                        .requestMatchers("/api/v1/email/verification/resend").permitAll()
                         .requestMatchers("/api/v1/auth/forgot-password").permitAll()
                         .requestMatchers("/api/v1/auth/reset-password").permitAll()
                         .requestMatchers("/api/v1/auth/sign-in").permitAll()

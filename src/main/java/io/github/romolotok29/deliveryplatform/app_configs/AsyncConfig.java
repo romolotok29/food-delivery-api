@@ -1,4 +1,4 @@
-package io.github.romolotok29.deliveryplatform.app_configs.async;
+package io.github.romolotok29.deliveryplatform.app_configs;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

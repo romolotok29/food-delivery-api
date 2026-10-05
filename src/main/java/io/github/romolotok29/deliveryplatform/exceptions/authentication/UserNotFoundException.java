@@ -1,8 +1,9 @@
 package io.github.romolotok29.deliveryplatform.exceptions.authentication;
 
 public class UserNotFoundException extends RuntimeException {
+
     public UserNotFoundException() {
-        super("A user with the provided email address wasn't found.");
+        super("A user with the provided credentials wasn't found.");
     }
 
 }
