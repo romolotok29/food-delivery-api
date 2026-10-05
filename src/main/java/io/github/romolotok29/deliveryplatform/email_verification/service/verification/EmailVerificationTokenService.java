@@ -1,12 +1,13 @@
-package io.github.romolotok29.deliveryplatform.email_verification.service;
+package io.github.romolotok29.deliveryplatform.email_verification.service.verification;
 
 import io.github.romolotok29.deliveryplatform.account.entity.User;
 import io.github.romolotok29.deliveryplatform.email_verification.entity.EmailVerificationToken;
 import io.github.romolotok29.deliveryplatform.email_verification.repository.EmailVerificationTokenRepository;
-import io.github.romolotok29.deliveryplatform.exceptions.verification.EmailAddressAlreadyVerifiedException;
+import io.github.romolotok29.deliveryplatform.exceptions.verification.VerificationTokenAlreadyUsedException;
 import io.github.romolotok29.deliveryplatform.exceptions.verification.VerificationTokenExpiredException;
 import io.github.romolotok29.deliveryplatform.exceptions.verification.VerificationTokenNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +26,12 @@ public class EmailVerificationTokenService implements IEmailVerificationTokenSer
 
     private final EmailVerificationTokenRepository emailVerificationTokenRepository;
     private final SecureRandom secureRandom = new SecureRandom();
+
+    @Scheduled(fixedRate = 3600000)
+    @Transactional
+    public void deleteExpiredTokens() {
+        emailVerificationTokenRepository.deleteAllByExpiresAtBefore(Instant.now());
+    }
 
     @Override
     public String generateToken() {
@@ -81,12 +88,12 @@ public class EmailVerificationTokenService implements IEmailVerificationTokenSer
         }
 
         if (foundToken.getVerifiedAt() != null) {
-            throw new EmailAddressAlreadyVerifiedException();
+            throw new VerificationTokenAlreadyUsedException();
         }
 
         foundToken.setVerifiedAt(now);
 
-        return emailVerificationTokenRepository.save(foundToken);
+        return foundToken;
     }
 
 }

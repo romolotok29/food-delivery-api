@@ -26,6 +26,9 @@ public class User {
     @Column(name = "email_address", nullable = false, unique = true)
     private String emailAddress;
 
+    @Column(name = "pending_email", unique = true)
+    private String pendingEmail;
+
     @Column(name = "password", nullable = false)
     private String password;
 

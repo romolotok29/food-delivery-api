@@ -3,7 +3,7 @@ package io.github.romolotok29.deliveryplatform.reset_password.service;
 import io.github.romolotok29.deliveryplatform.account.entity.User;
 import io.github.romolotok29.deliveryplatform.account.repository.UserRepository;
 import io.github.romolotok29.deliveryplatform.email_verification.entity.EmailVerificationToken;
-import io.github.romolotok29.deliveryplatform.email_verification.service.EmailVerificationTokenService;
+import io.github.romolotok29.deliveryplatform.email_verification.service.verification.EmailVerificationTokenService;
 import io.github.romolotok29.deliveryplatform.exceptions.verification.UnverifiedEmailAddressException;
 import io.github.romolotok29.deliveryplatform.reset_password.dto.ResetPasswordRequest;
 import lombok.RequiredArgsConstructor;

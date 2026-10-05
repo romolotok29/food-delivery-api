@@ -1,4 +1,4 @@
-package io.github.romolotok29.deliveryplatform.email_verification.service;
+package io.github.romolotok29.deliveryplatform.email_verification.service.verification;
 
 import io.github.romolotok29.deliveryplatform.account.entity.User;
 import io.github.romolotok29.deliveryplatform.email_verification.entity.EmailVerificationToken;

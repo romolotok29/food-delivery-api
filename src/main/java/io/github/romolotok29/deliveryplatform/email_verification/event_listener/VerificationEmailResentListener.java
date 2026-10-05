@@ -1,5 +1,6 @@
-package io.github.romolotok29.deliveryplatform.email_verification.event;
+package io.github.romolotok29.deliveryplatform.email_verification.event_listener;
 
+import io.github.romolotok29.deliveryplatform.email_verification.event.VerificationEmailResentEvent;
 import io.github.romolotok29.deliveryplatform.email_verification.service.EmailNotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
@@ -8,15 +9,15 @@ import org.springframework.transaction.event.TransactionalEventListener;
 
 @Component
 @RequiredArgsConstructor
-public class EmailChangedEventListener {
+public class VerificationEmailResentListener {
 
     private final EmailNotificationService emailNotificationService;
 
     @Async
     @TransactionalEventListener
-    public void handleEmailChangedEvent(EmailChangedEvent event) {
+    public void handleVerificationEmailResentEvent(VerificationEmailResentEvent event) {
 
-        emailNotificationService.sendEmailAddressResetVerificationEmail(event.emailAddress(), event.verificationToken());
+        emailNotificationService.sendRegistrationVerificationEmail(event.emailAddress(), event.token());
     }
 
 }

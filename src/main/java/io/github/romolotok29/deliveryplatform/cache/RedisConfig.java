@@ -1,4 +1,4 @@
-package io.github.romolotok29.deliveryplatform.app_configs.cache;
+package io.github.romolotok29.deliveryplatform.cache;
 
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -35,7 +35,7 @@ public class RedisConfig {
                 .entryTtl(Duration.ofMinutes(10))
                 .enableTimeToIdle()
                 .disableCachingNullValues()
-                .prefixCacheNameWith("food-delivery-app")
+//                .prefixCacheNameWith("food-delivery-app:")
                 .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(
                                 new StringRedisSerializer()
                         )

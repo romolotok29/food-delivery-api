@@ -22,7 +22,9 @@ public class AccountLockoutService implements IAccountLockoutService {
     @Transactional
     public void recordFailedAttempts(String emailAddress) {
 
-        User user = userRepository.findUserByEmailAddress(emailAddress).orElseThrow();
+        User user = userRepository
+                .findUserByEmailAddress(emailAddress)
+                .orElseThrow(UserNotFoundException::new);
 
         int attempts = user.getFailedLoginAttempts() + 1;
         user.setFailedLoginAttempts(attempts);
