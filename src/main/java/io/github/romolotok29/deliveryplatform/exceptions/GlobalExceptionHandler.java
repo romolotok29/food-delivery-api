@@ -5,6 +5,7 @@ import io.github.romolotok29.deliveryplatform.exceptions.authentication.InvalidC
 import io.github.romolotok29.deliveryplatform.exceptions.authentication.UserNotFoundException;
 import io.github.romolotok29.deliveryplatform.exceptions.registration.UserAlreadyExistsException;
 import io.github.romolotok29.deliveryplatform.exceptions.verification.*;
+import io.github.romolotok29.deliveryplatform.util.JsonPropertyUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -164,7 +165,7 @@ public class GlobalExceptionHandler {
         ex.getBindingResult()
                 .getFieldErrors()
                 .forEach(errorField -> errors.put(
-                                errorField.getField(),
+                                JsonPropertyUtils.toSnakeCase(errorField.getField()),
                                 errorField.getDefaultMessage()
                         )
                 );

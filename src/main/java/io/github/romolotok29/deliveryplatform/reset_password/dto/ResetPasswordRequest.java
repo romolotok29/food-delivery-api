@@ -1,6 +1,5 @@
 package io.github.romolotok29.deliveryplatform.reset_password.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.romolotok29.deliveryplatform.validation.PasswordsMatch;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -12,7 +11,6 @@ import tools.jackson.databind.annotation.JsonNaming;
 @PasswordsMatch(password = "newPassword", confirmPassword = "confirmNewPassword")
 public record ResetPasswordRequest(
         @NotBlank(message = "This field can't be blank.")
-        @JsonProperty("verification_token")
         String verificationToken,
 
         @NotBlank(message = "This field can't be blank.")
@@ -21,11 +19,9 @@ public record ResetPasswordRequest(
                 message = """
                     Password must contain at least one digit,\s
                     one lowercase letter, one uppercase letter and one special character.""")
-        @JsonProperty("new_password")
         String newPassword,
 
         @NotBlank(message = "This field can't be blank.")
-        @JsonProperty("confirm_new_password")
         String confirmNewPassword
 ) {
 

@@ -25,7 +25,7 @@ public class SignUpController {
                 .status(HttpStatus.CREATED)
                 .body(
                         new SignUpResponse(
-                                "Please check your email and click the confirmation link to complete your registration."
+                                "Please check your mailbox and verify provided email address to complete registration."
                         )
                 );
     }

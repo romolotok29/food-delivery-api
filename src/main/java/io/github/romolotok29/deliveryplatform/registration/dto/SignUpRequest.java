@@ -1,6 +1,6 @@
 package io.github.romolotok29.deliveryplatform.registration.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonRootName;
 import io.github.romolotok29.deliveryplatform.validation.PasswordsMatch;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -13,20 +13,18 @@ import lombok.*;
 @PasswordsMatch(
         password = "password",
         confirmPassword = "confirmPassword")
+@JsonRootName("sign_up")
 public class SignUpRequest {
 
     @NotBlank(message = "This field is required to be filled in.")
     @Size(min = 2, max = 50, message = "Full name must be 2-50 characters long.")
-    @JsonProperty("full_name")
     private String fullName;
 
     @NotBlank(message = "This field can not be blank.")
     @Email(message = "Invalid email address format.")
-    @JsonProperty("email_address")
     private String emailAddress;
 
     @NotBlank(message = "This field can not be blank.")
-    @JsonProperty("phone_number")
     @Pattern(
             regexp = "^\\+[1-9]\\d{8,14}$",
             message = "Invalid phone number format.")
@@ -42,7 +40,6 @@ public class SignUpRequest {
 
 
     @NotBlank(message = "This field can't be blank.")
-    @JsonProperty("confirm_password")
     private String confirmPassword;
 
 }
