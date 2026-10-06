@@ -1,10 +1,11 @@
 package io.github.romolotok29.deliveryplatform.account.controller;
 
+import io.github.romolotok29.deliveryplatform.account.dto.AccountDetailsResponse;
+import io.github.romolotok29.deliveryplatform.account.dto.AccountDetailsResponseEnvelope;
 import io.github.romolotok29.deliveryplatform.account.dto.EditAccountProfileRequest;
 import io.github.romolotok29.deliveryplatform.account.mapper.UserMapper;
 import io.github.romolotok29.deliveryplatform.cache.ProfileCache;
 import io.github.romolotok29.deliveryplatform.security.service.SecurityLogoutService;
-import io.github.romolotok29.deliveryplatform.account.dto.AccountDetailsResponse;
 import io.github.romolotok29.deliveryplatform.account.service.IAccountService;
 import io.github.romolotok29.deliveryplatform.security.model.SecurityUser;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,15 +24,20 @@ import org.springframework.web.bind.annotation.*;
 public class AccountController {
 
     private final IAccountService accountService;
-    private final SecurityLogoutService  securityLogoutService;
+    private final SecurityLogoutService securityLogoutService;
     private final UserMapper userMapper;
 
     @GetMapping //@RequestParam only for search, filter & pagination
-    public ResponseEntity<AccountDetailsResponse> getCurrentAccountDetails(@AuthenticationPrincipal SecurityUser securityUser) {
+    public ResponseEntity<AccountDetailsResponseEnvelope> getCurrentAccountDetails(@AuthenticationPrincipal SecurityUser securityUser) {
 
         ProfileCache currentUser = accountService.getCurrentAccountDetails(securityUser.getUserId());
 
-        return ResponseEntity.status(HttpStatus.OK).body(userMapper.toAccountResponse(currentUser));
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new AccountDetailsResponseEnvelope(
+                                userMapper.toAccountResponse(currentUser)
+                        )
+                );
     }
 
     @PatchMapping("/edit-profile")
@@ -44,7 +50,10 @@ public class AccountController {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(userMapper.toAccountResponse(currentUser));
+                .body(new AccountDetailsResponse(
+                                userMapper.toProfileResponse(currentUser)
+                        )
+                );
     }
 
     @DeleteMapping("/delete")

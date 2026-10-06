@@ -15,4 +15,8 @@ public @interface NotBlankIfPresent {
 
     String message() default "This field can't be blank.";
 
+    Class<?>[] groups() default {};
+
+    Class<? extends Payload>[] payload() default {};
+
 }
