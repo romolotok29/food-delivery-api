@@ -16,7 +16,7 @@ public class EmailNotificationService {
 
     private final JavaMailSender mailSender;
 
-    @Value("spring.mail.username")
+    @Value("${spring.mail.username}")
     private String EMAIL_FROM;
 
     @Async
