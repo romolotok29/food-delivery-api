@@ -39,13 +39,9 @@ spring:
 
 logging:
   level:
-    org:
-      springframework:
-        security: TRACE
+    org.springframework.security: TRACE
 
 server:
   port: 9090
   error:
     include-message: always
-    include-stacktrace: always
-    include-binding-errors: always
