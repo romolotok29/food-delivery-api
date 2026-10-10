@@ -1,4 +1,4 @@
-package io.github.romolotok29.deliveryplatform.cache;
+package io.github.romolotok29.deliveryplatform.app_configs;
 
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -14,7 +14,7 @@ import java.time.Duration;
 
 @Configuration
 @EnableCaching
-public class RedisConfig {
+public class RedisCacheConfig {
 
     @Bean
     public RedisCacheManager cacheConfiguration(
@@ -22,7 +22,8 @@ public class RedisConfig {
             RedisConnectionFactory connectionFactory
     ) {
 
-        BasicPolymorphicTypeValidator polymorphicTypeValidator = BasicPolymorphicTypeValidator.builder()
+        BasicPolymorphicTypeValidator polymorphicTypeValidator = BasicPolymorphicTypeValidator
+                .builder()
                 .allowIfSubType("io.github.romolotok29.deliveryplatform.cache.")
                 .build();
 

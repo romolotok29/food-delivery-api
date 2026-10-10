@@ -1,4 +1,4 @@
-package io.github.romolotok29.deliveryplatform.security.config;
+package io.github.romolotok29.deliveryplatform.app_configs;
 
 import io.github.romolotok29.deliveryplatform.security.provider.LockoutAuthenticationProvider;
 import io.github.romolotok29.deliveryplatform.security.service.JpaUserDetailsService;
