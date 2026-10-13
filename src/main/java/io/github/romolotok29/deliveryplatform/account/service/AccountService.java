@@ -92,7 +92,7 @@ public class AccountService implements IAccountService {
     }
 
     @Transactional
-    @CacheEvict(cacheNames = CacheNames.USERS, key = "#userId") //#user.id?
+    @CacheEvict(cacheNames = CacheNames.USERS, key = "#userId")
     @Override
     public void deleteAccount(Long userId) {
 
