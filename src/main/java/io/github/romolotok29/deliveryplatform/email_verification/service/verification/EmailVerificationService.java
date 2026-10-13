@@ -40,10 +40,7 @@ public class EmailVerificationService {
 
         user.setEmailVerified(true);
 
-        applicationEventPublisher.publishEvent(new RegistrationEmailVerifiedEvent(
-                        user.getEmailAddress()
-                )
-        );
+        applicationEventPublisher.publishEvent(new RegistrationEmailVerifiedEvent(user.getEmailAddress()));
     }
 
     @Transactional
@@ -63,39 +60,39 @@ public class EmailVerificationService {
         user.setEmailAddress(pendingEmail);
         user.setPendingEmail(null);
 
-        applicationEventPublisher.publishEvent(
-                new EmailChangedEvent(
-                        user.getEmailAddress()
-                )
-        );
+        applicationEventPublisher.publishEvent(new EmailChangedEvent(user.getEmailAddress()));
     }
 
     @Transactional
     public void resendVerificationToken(ResendVerificationRequest request) {
 
-        User foundUser = userRepository.findUserByEmailAddress(request.emailAddress())
-                .orElseThrow(UserNotFoundException::new);
+        User user = findUserForVerification(request.emailAddress());
 
-        if (foundUser.isEmailVerified()) {
-            throw new EmailAddressAlreadyVerifiedException();
-        }
-
-        Long userId = foundUser.getId();
-
-        tokenRepository.deleteTokenByUser_Id(userId);
+        tokenRepository.deleteTokenByUser_Id(user.getId());
 
         String rawToken = tokenService.generateToken();
 
-        EmailVerificationToken newToken = tokenService.createToken(foundUser, rawToken);
+        EmailVerificationToken newToken = tokenService.createToken(user, rawToken);
 
         tokenRepository.save(newToken);
 
-        applicationEventPublisher.publishEvent(
-                new VerificationEmailResentEvent(
-                        foundUser.getEmailAddress(),
+        applicationEventPublisher.publishEvent(new VerificationEmailResentEvent(
+                        user.getEmailAddress(),
                         rawToken
                 )
         );
+    }
+
+    public User findUserForVerification(String emailAddress) {
+
+        User user = userRepository.findUserByEmailAddress(emailAddress)
+                .orElseThrow(UserNotFoundException::new);
+
+        if (user.isEmailVerified()) {
+            throw new EmailAddressAlreadyVerifiedException();
+        }
+
+        return user;
     }
 
 }
