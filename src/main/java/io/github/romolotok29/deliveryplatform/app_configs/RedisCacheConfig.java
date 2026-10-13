@@ -1,5 +1,6 @@
 package io.github.romolotok29.deliveryplatform.app_configs;
 
+import io.github.romolotok29.deliveryplatform.account.mapper.RedisJsonMapper;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -7,7 +8,6 @@ import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.serializer.*;
-import tools.jackson.databind.json.JsonMapper;
 import tools.jackson.databind.jsontype.BasicPolymorphicTypeValidator;
 
 import java.time.Duration;
@@ -18,7 +18,6 @@ public class RedisCacheConfig {
 
     @Bean
     public RedisCacheManager cacheConfiguration(
-            JsonMapper jsonMapper,
             RedisConnectionFactory connectionFactory
     ) {
 
@@ -28,7 +27,7 @@ public class RedisCacheConfig {
                 .build();
 
         GenericJacksonJsonRedisSerializer valueSerializer = GenericJacksonJsonRedisSerializer
-                .builder(jsonMapper::rebuild)
+                .builder(RedisJsonMapper::newBuilder)
                 .enableDefaultTyping(polymorphicTypeValidator)
                 .build();
 

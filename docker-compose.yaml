@@ -17,6 +17,7 @@ services:
       timeout: 5s
       start_period: 10s
       retries: 5
+
 volumes:
   redis-data:
     driver: local

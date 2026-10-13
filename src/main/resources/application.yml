@@ -7,7 +7,7 @@ spring:
     store-type: redis
     data:
       redis:
-        namespace: food-delivery-api
+        namespace: food-delivery-api:session
 
   datasource:
     driver-class-name: org.postgresql.Driver
