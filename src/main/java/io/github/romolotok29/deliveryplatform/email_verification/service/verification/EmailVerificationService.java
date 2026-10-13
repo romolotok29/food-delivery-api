@@ -6,6 +6,7 @@ import io.github.romolotok29.deliveryplatform.cache.CacheNames;
 import io.github.romolotok29.deliveryplatform.email_verification.dto.ResendVerificationRequest;
 import io.github.romolotok29.deliveryplatform.email_verification.entity.EmailVerificationToken;
 import io.github.romolotok29.deliveryplatform.email_verification.event.EmailChangedEvent;
+import io.github.romolotok29.deliveryplatform.email_verification.event.RegistrationEmailVerifiedEvent;
 import io.github.romolotok29.deliveryplatform.email_verification.event.VerificationEmailResentEvent;
 import io.github.romolotok29.deliveryplatform.email_verification.repository.EmailVerificationTokenRepository;
 import io.github.romolotok29.deliveryplatform.exceptions.authentication.UserNotFoundException;
@@ -38,6 +39,11 @@ public class EmailVerificationService {
         }
 
         user.setEmailVerified(true);
+
+        applicationEventPublisher.publishEvent(new RegistrationEmailVerifiedEvent(
+                        user.getEmailAddress()
+                )
+        );
     }
 
     @Transactional
