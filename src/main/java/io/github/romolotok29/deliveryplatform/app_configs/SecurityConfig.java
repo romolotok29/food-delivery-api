@@ -1,7 +1,6 @@
 package io.github.romolotok29.deliveryplatform.app_configs;
 
 import io.github.romolotok29.deliveryplatform.security.provider.LockoutAuthenticationProvider;
-import io.github.romolotok29.deliveryplatform.security.service.JpaUserDetailsService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,7 +34,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(
             HttpSecurity httpSecurity,
             CsrfTokenRepository csrfTokenRepository,
-            JpaUserDetailsService jpaUserDetailsService
+            SessionAuthenticationStrategy sessionAuthenticationStrategy,
+            AuthenticationManager authenticationManager
     ) {
 
         return httpSecurity
@@ -57,7 +57,7 @@ public class SecurityConfig {
                         .logoutUrl("/api/v1/auth/sign-out")
                         .invalidateHttpSession(true)
                         .clearAuthentication(true)
-                        .deleteCookies("JSESSIONID")
+                        .deleteCookies("SESSION")
                         .logoutSuccessHandler(
                                 (request, response, authentication) ->
                                         response.setStatus(HttpServletResponse.SC_NO_CONTENT)
@@ -66,13 +66,10 @@ public class SecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .sessionManagement(
                         session -> session
-//                                .sessionAuthenticationStrategy(new )
                                 .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-                                .sessionFixation().changeSessionId()
-                                .maximumSessions(1)
-                                .maxSessionsPreventsLogin(true)
-                                .sessionRegistry(sessionRegistry())
+                                .sessionAuthenticationStrategy(sessionAuthenticationStrategy)
                 )
+                .authenticationManager(authenticationManager)
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/error").permitAll()
                         .requestMatchers("/api/v1/auth/sign-up").permitAll()
@@ -85,10 +82,6 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/csrf").permitAll()
                         .anyRequest().authenticated()
                 )
-//                .anonymous()
-//                .authenticationManager()
-//                .authenticationProvider()
-                .userDetailsService(jpaUserDetailsService)
                 .build();
     }
 
@@ -103,10 +96,9 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SessionAuthenticationStrategy sessionAuthenticationStrategy(
+        public SessionAuthenticationStrategy sessionAuthenticationStrategy(
             CsrfTokenRepository csrfTokenRepository,
             SessionRegistry sessionRegistry
-
     ) {
 
         var concurrentSessionControl =
@@ -149,29 +141,3 @@ public class SecurityConfig {
     }
 
 }
-
-//    @Bean
-//    public DaoAuthenticationProvider authenticationProvider(
-//            UserDetailsService userDetailsService, //JpaUserDetailsService?
-//            PasswordEncoder passwordEncoder
-//    ) {
-//        DaoAuthenticationProvider provider =
-//                new DaoAuthenticationProvider(userDetailsService);
-//
-//        provider.setPasswordEncoder(passwordEncoder);
-//
-//        return provider;
-//    }
-
-//    @Bean
-//    public AuthenticationManager authenticationManager() {
-//        return new ProviderManager(List.of(customAuthenticationProvider()));
-//    }
-
-    //    @Bean
-//    public AuthenticationManager authenticationManager(HttpSecurity httpSecurity) throws Exception {
-//        return httpSecurity
-//                .getSharedObject(AuthenticationManagerBuilder.class)
-//                .authenticationProvider(authenticationProvider())
-//                .build();
-//    }
