@@ -100,6 +100,8 @@ public class AccountService implements IAccountService {
             throw new UserAlreadyExistsException();
         }
 
+        user.setPendingEmail(requestedNewEmail);
+
         String rawToken = tokenService.generateToken();
 
         EmailVerificationToken token = tokenService.createToken(user, rawToken);
