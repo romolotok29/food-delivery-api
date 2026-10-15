@@ -2,15 +2,18 @@ package io.github.romolotok29.deliveryplatform.email_verification.service.verifi
 
 import io.github.romolotok29.deliveryplatform.account.entity.User;
 import io.github.romolotok29.deliveryplatform.account.repository.UserRepository;
+import io.github.romolotok29.deliveryplatform.cache.CacheNames;
 import io.github.romolotok29.deliveryplatform.email_verification.dto.ResendVerificationRequest;
 import io.github.romolotok29.deliveryplatform.email_verification.entity.EmailVerificationToken;
 import io.github.romolotok29.deliveryplatform.email_verification.event.EmailChangedEvent;
+import io.github.romolotok29.deliveryplatform.email_verification.event.RegistrationEmailVerifiedEvent;
 import io.github.romolotok29.deliveryplatform.email_verification.event.VerificationEmailResentEvent;
 import io.github.romolotok29.deliveryplatform.email_verification.repository.EmailVerificationTokenRepository;
 import io.github.romolotok29.deliveryplatform.exceptions.authentication.UserNotFoundException;
 import io.github.romolotok29.deliveryplatform.exceptions.verification.EmailAddressAlreadyVerifiedException;
 import io.github.romolotok29.deliveryplatform.exceptions.verification.InvalidVerificationTokenException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,9 +39,12 @@ public class EmailVerificationService {
         }
 
         user.setEmailVerified(true);
+
+        applicationEventPublisher.publishEvent(new RegistrationEmailVerifiedEvent(user.getEmailAddress()));
     }
 
     @Transactional
+    @CacheEvict(cacheNames = CacheNames.USERS, key = "#userId")
     public void verifyEmailChange(String token, Long userId) {
 
         EmailVerificationToken verificationToken = tokenService.verifyToken(token);
@@ -54,39 +60,39 @@ public class EmailVerificationService {
         user.setEmailAddress(pendingEmail);
         user.setPendingEmail(null);
 
-        applicationEventPublisher.publishEvent(
-                new EmailChangedEvent(
-                        user.getEmailAddress()
-                )
-        );
+        applicationEventPublisher.publishEvent(new EmailChangedEvent(user.getEmailAddress()));
     }
 
     @Transactional
     public void resendVerificationToken(ResendVerificationRequest request) {
 
-        User foundUser = userRepository.findUserByEmailAddress(request.emailAddress())
-                .orElseThrow(UserNotFoundException::new);
+        User user = findUserForVerification(request.emailAddress());
 
-        if (foundUser.isEmailVerified()) {
-            throw new EmailAddressAlreadyVerifiedException();
-        }
-
-        Long userId = foundUser.getId();
-
-        tokenRepository.deleteTokenByUser_Id(userId);
+        tokenRepository.deleteTokenByUser_Id(user.getId());
 
         String rawToken = tokenService.generateToken();
 
-        EmailVerificationToken newToken = tokenService.createToken(foundUser, rawToken);
+        EmailVerificationToken newToken = tokenService.createToken(user, rawToken);
 
         tokenRepository.save(newToken);
 
-        applicationEventPublisher.publishEvent(
-                new VerificationEmailResentEvent(
-                        foundUser.getEmailAddress(),
+        applicationEventPublisher.publishEvent(new VerificationEmailResentEvent(
+                        user.getEmailAddress(),
                         rawToken
                 )
         );
+    }
+
+    public User findUserForVerification(String emailAddress) {
+
+        User user = userRepository.findUserByEmailAddress(emailAddress)
+                .orElseThrow(UserNotFoundException::new);
+
+        if (user.isEmailVerified()) {
+            throw new EmailAddressAlreadyVerifiedException();
+        }
+
+        return user;
     }
 
 }

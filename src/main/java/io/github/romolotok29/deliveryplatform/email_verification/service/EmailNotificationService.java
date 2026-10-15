@@ -41,6 +41,25 @@ public class EmailNotificationService {
     }
 
     @Async
+    public void sendRegistrationEmailVerifiedEmail(String to) {
+        send(
+                to,
+                "Your email has been verified! 📧☑️",
+                """
+                Your email address has been successfully verified. 🎉
+    
+                Your Food Delivery account is now ready to use. You can log in and start exploring!
+                
+                If you didn't perform this action, please contact our support team.
+                
+                Best regards,
+                
+                The Food Delivery Team 🚚
+                """
+        );
+    }
+
+    @Async
     public void sendPasswordResetVerificationEmail(String to, String token) {
         send(
                 to,

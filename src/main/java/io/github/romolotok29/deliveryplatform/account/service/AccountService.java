@@ -49,40 +49,9 @@ public class AccountService implements IAccountService {
 
         User currentUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 
-        if (request.getFullName() != null && !request.getFullName().equals(currentUser.getFullName())) {
-            currentUser.setFullName(request.getFullName());
-        }
+        updateProfileFields(currentUser, request);
 
-        if  (request.getPhoneNumber() != null && !request.getPhoneNumber().equals(currentUser.getPhoneNumber())) {
-            currentUser.setPhoneNumber(request.getPhoneNumber());
-        }
-
-        String requestedNewEmail = request.getEmailAddress();
-
-        if (requestedNewEmail != null && !requestedNewEmail.equalsIgnoreCase(currentUser.getEmailAddress())) {
-
-            userRepository.findUserByEmailAddress(requestedNewEmail)
-                    .ifPresent(user -> {
-                        throw new UserAlreadyExistsException();
-                    });
-
-            currentUser.setPendingEmail(requestedNewEmail);
-
-            String rawToken = tokenService.generateToken();
-
-            EmailVerificationToken token = tokenService.createToken(currentUser, rawToken);
-
-            tokenRepository.save(token);
-
-            applicationEventPublisher.publishEvent(
-                    new EmailChangeRequestedEvent(
-                            requestedNewEmail,
-                            rawToken
-                    )
-            );
-        }
-
-        userRepository.save(currentUser);
+        requestEmailChange(currentUser, request.getEmailAddress());
 
         return new ProfileCache(
                 currentUser.getFullName(),
@@ -92,7 +61,7 @@ public class AccountService implements IAccountService {
     }
 
     @Transactional
-    @CacheEvict(cacheNames = CacheNames.USERS, key = "#userId") //#user.id?
+    @CacheEvict(cacheNames = CacheNames.USERS, key = "#userId")
     @Override
     public void deleteAccount(Long userId) {
 
@@ -102,6 +71,48 @@ public class AccountService implements IAccountService {
 
         applicationEventPublisher.publishEvent(
                 new AccountDeletedEvent(currentUser.getEmailAddress())
+        );
+    }
+
+    private void updateProfileFields(User user, EditAccountProfileRequest request) {
+
+        if (request.getFullName() != null && !request.getFullName().equals(user.getFullName())) {
+            user.setFullName(request.getFullName());
+        }
+
+        if  (request.getPhoneNumber() != null && !request.getPhoneNumber().equals(user.getPhoneNumber())) {
+            user.setPhoneNumber(request.getPhoneNumber());
+        }
+    }
+
+    private void requestEmailChange(User user, String requestedNewEmail) {
+
+        if (requestedNewEmail == null
+                || requestedNewEmail.equalsIgnoreCase(user.getEmailAddress())) {
+            return;
+        }
+
+        boolean emailAddressExists = userRepository
+                .findUserByEmailAddress(requestedNewEmail)
+                .isPresent();
+
+        if (emailAddressExists) {
+            throw new UserAlreadyExistsException();
+        }
+
+        user.setPendingEmail(requestedNewEmail);
+
+        String rawToken = tokenService.generateToken();
+
+        EmailVerificationToken token = tokenService.createToken(user, rawToken);
+
+        tokenRepository.save(token);
+
+        applicationEventPublisher.publishEvent(
+                new EmailChangeRequestedEvent(
+                        requestedNewEmail,
+                        rawToken
+                )
         );
     }
 
