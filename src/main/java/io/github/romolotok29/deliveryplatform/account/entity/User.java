@@ -20,41 +20,38 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "full_name", nullable = false)
+    @Column(nullable = false)
     private String fullName;
 
-    @Column(name = "email_address", nullable = false, unique = true)
+    @Column(nullable = false, unique = true)
     private String emailAddress;
 
-    @Column(name = "pending_email", unique = true)
+    @Column(unique = true)
     private String pendingEmail;
 
-    @Column(name = "password", nullable = false)
+    @Column(nullable = false)
     private String password;
 
-    @Column(name = "phone_number", nullable = false, unique = true)
+    @Column(nullable = false, unique = true)
     private String phoneNumber;
 
-    @Column(name = "role", nullable = false)
-//    @ElementCollection(targetClass = Role.class)
+    //    @ElementCollection(targetClass = Role.class, fetch = FetchType.LAZY)
+//    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @Column(name = "is_email_verified")
     private boolean isEmailVerified = false;
 
-    @Column(name = "created_at", updatable = false)
+    @Column(updatable = false)
     @CreationTimestamp
     private Instant createdAt;
 
     @UpdateTimestamp
-    @Column(name = "updated_at")
     private Instant updatedAt;
 
-    @Column(name = "failed_login_attempts")
     private int failedLoginAttempts;
 
-    @Column(name = "account_locked_until")
     private Instant accountLockedUntil;
 
 }

@@ -32,17 +32,16 @@ public class EmailVerificationToken {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
-    @Column(name = "token_hash", unique = true, nullable = false)
+    @Column(unique = true, nullable = false)
     private String tokenHash;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(nullable = false, updatable = false)
     @CreationTimestamp
     private Instant createdAt;
 
-    @Column(name = "expires_at", nullable = false)
+    @Column(nullable = false)
     private Instant expiresAt;
 
-    @Column(name = "verified_at")
     private Instant verifiedAt;
 
 }

@@ -1,0 +1,68 @@
+spring:
+  application:
+    name: food-delivery-api
+
+  session:
+    timeout: 10m
+    store-type: redis
+    data:
+      redis:
+        namespace: food-delivery-api:session
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+  jpa:
+    show-sql: true
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
+        generate_statistics: true
+      jakarta:
+        persistence:
+          validation:
+            mode: callback
+
+  flyway:
+    enabled: false
+
+  mail:
+    default-encoding: UTF-8
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    test-connection: true
+    ssl:
+      verify-hostname: true
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+
+  testcontainers:
+    beans:
+      startup: parallel
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.springframework.test.context.cache: DEBUG
+
+server:
+  port: 9090
+  error:
+    include-stacktrace: always
+    include-binding-errors: always
+    include-exception: true
+    include-message: always
+    include-path: always
