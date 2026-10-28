@@ -1,6 +1,7 @@
 package io.github.romolotok29.deliveryplatform.base;
 
-import io.github.romolotok29.deliveryplatform.testcontainers.RedisContainerConfig;
+import io.github.romolotok29.deliveryplatform.testcontainers.PostgresTestContainer;
+import io.github.romolotok29.deliveryplatform.testcontainers.RedisTestContainer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,7 @@ import org.springframework.test.web.servlet.assertj.MockMvcTester;
 @ActiveProfiles("test")
 @SpringBootTest
 @AutoConfigureMockMvc
-@ImportTestcontainers(RedisContainerConfig.class)
+@ImportTestcontainers({PostgresTestContainer.class, RedisTestContainer.class})
 public abstract class AbstractIntegrationTest {
 
     @Autowired

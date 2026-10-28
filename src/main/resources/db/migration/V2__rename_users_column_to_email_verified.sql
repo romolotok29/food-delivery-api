@@ -1,0 +1,1 @@
+alter table users rename column is_email_verified to email_verified

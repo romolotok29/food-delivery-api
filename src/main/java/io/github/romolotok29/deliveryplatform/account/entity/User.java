@@ -41,7 +41,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    private boolean isEmailVerified = false;
+    private boolean emailVerified;
 
     @Column(updatable = false)
     @CreationTimestamp
