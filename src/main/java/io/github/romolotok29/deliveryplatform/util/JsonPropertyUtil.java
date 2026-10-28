@@ -4,7 +4,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class JsonPropertyUtils {
+public final class JsonPropertyUtil {
 
     public static String toSnakeCase(String value) {
         return value
