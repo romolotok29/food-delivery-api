@@ -3,8 +3,6 @@ package io.github.romolotok29.deliveryplatform.base;
 import io.github.romolotok29.deliveryplatform.account.repository.UserRepository;
 import io.github.romolotok29.deliveryplatform.email_verification.repository.EmailVerificationTokenRepository;
 import io.github.romolotok29.deliveryplatform.testcontainers.PostgresTestContainer;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
